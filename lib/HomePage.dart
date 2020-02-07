@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
   EdgeInsetsGeometry myPadding()
   {
       var screenSize = MediaQuery.of(context).size;
-      print(screenSize.toString());
+      //print(screenSize.toString());
       if(screenSize.height < 640)
         return EdgeInsets.fromLTRB(70.0,0.0,70.0,0.0);
       else if(screenSize.height < 690)
