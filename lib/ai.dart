@@ -11,13 +11,14 @@ class ai{
     int player = data.isCross;
 
     //risultati
-    int bestScore;
-    List<int> bestCords; //DA INIZIALIZZARE...nah
+    int bestScore;        //miglior punteggio ottenibile
+    List<int> bestCords;  //coordinate che portano al miglior punteggio ottenibile
 
+    //genero tutte le possibili configurazioni future possibili della board
     for (int i = 0; i < 9; i++) {
       botTempCords = utility.convertToCords(i);
       if (boardCopy[botTempCords[0]][botTempCords[1]] == 0) {
-        List<List<int>> botBoard;
+        List<List<int>> botBoard; //creazione di una board di copia
         botBoard = [
           [boardCopy[0][0], boardCopy[0][1], boardCopy[0][2], boardCopy[0][3]],
           [boardCopy[1][0], boardCopy[1][1], boardCopy[1][2], boardCopy[1][3]],
@@ -25,9 +26,12 @@ class ai{
           [boardCopy[3][0], boardCopy[3][1], boardCopy[3][2], boardCopy[3][3]]
         ];
         botBoard = utility.insertInBoard(botBoard, botTempCords, player);
-        if(checkScore(botBoard) == player)
+        if(checkScore(botBoard) == player)  //se si vince con la mossa appena effettuata le coordinate attuali sono le migliori
         {return botTempCords;}
-        tempScore = minimax(botBoard, false, player);
+        //l'algoritmo di minimax restituisce l'esito della partita
+        //l'algoritmo sceglie sempre la mossa migliore per il player e per il bot
+        //in questo modo gli è possibile sapere come finirà una partita
+        tempScore = minimax(botBoard, false, player); 
         if (bestScore == null) {
           bestScore = tempScore;
           bestCords = botTempCords;
@@ -47,6 +51,7 @@ class ai{
     return bestCords;
   }
 
+  //simile a bestMove...solo che restituisce la scelta peggiore possibile
   static List<int> worstMove(List<List<int>> boardCopy) {
     //variabili di calcolo
     List<int> botTempCords;
@@ -55,7 +60,7 @@ class ai{
 
     //risultati
     int bestScore;
-    List<int> bestCords; //DA INIZIALIZZARE...nah
+    List<int> bestCords;
 
     for (int i = 0; i < 9; i++) {
       botTempCords = utility.convertToCords(i);
@@ -90,6 +95,8 @@ class ai{
     return bestCords;
   }
 
+
+  //restituisce le coordinate per una mossa a caso
   static List<int> randomMove(List<List<int>> boardCopy)
   {
     List<int> randomCords;
@@ -116,8 +123,7 @@ class ai{
       return score;
     }
 
-    //qua ci va un bell' ELSE su tutto in teoria
-    isMaximizing = !isMaximizing; //i guess
+    isMaximizing = !isMaximizing;
     pValue *= -1;
 
     for (int i = 0; i < 9; i++) {
@@ -155,6 +161,8 @@ class ai{
     return score;
   }
 
+
+  //ritorna il punteggio --> 1 = vince croce | -1 = vince bot | 0 = pareggio | -100 = non concluso
   static int checkScore(List<List<int>> myBoard) {
     bool tie = true;
     for (int i = 0; i < data.side; i++) {
