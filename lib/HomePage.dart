@@ -53,12 +53,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scafoldKey,
-      appBar: AppBar(
+      appBar: AppBar(   //barra superiore
         title: Text(
           'Tic Tac Toe Vicenzotto',
           style: TextStyle(color: Colors.white),
         ),
-        actions: <Widget>[
+        actions: <Widget>[    //pulsante per resettare i punteggi
           new IconButton(
             icon: Icon(Icons.refresh),
             onPressed:()
@@ -90,23 +90,20 @@ class _HomePageState extends State<HomePage> {
               ),
           Expanded(
             child: GridView.builder(
-              padding: const EdgeInsets.all(20.0),
+              padding: myPadding(),
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  childAspectRatio: 1.0,
-                  crossAxisSpacing: 5.0,
-                  mainAxisSpacing: 5.0),
+                  ),
               itemCount: data.slotsTOT,
               itemBuilder: (BuildContext context, int i) => SizedBox(
-                width: 100.0,
-                height: 100.0,
                 child: MaterialButton(
                   onPressed: () => playGame(utility.convertToCords(i), true),
                   child: Image(
                     image: getImage(i),
                   ),
                 ),
+                //size: MediaQuery.of(context).size,
               ),
             ),
           ),
@@ -134,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                   minWidth: 50.0,
                   height: 50.0,
                   shape: ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
+                      borderRadius: BorderRadius.circular(30.0)),
                   child: Text(
                     'Change Mode',
                     style: TextStyle(color: Colors.white, fontSize: 18.0),
@@ -146,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                   minWidth: 50.0,
                   height: 50.0,
                   shape: ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
+                      borderRadius: BorderRadius.circular(30.0)),
                   child: Text(
                     'Play Again',
                     style: TextStyle(color: Colors.white, fontSize: 18.0),
@@ -162,6 +159,21 @@ class _HomePageState extends State<HomePage> {
   }
 
 
+  //per gestire la compatipilità con dispositivi di dimensioni diverse 
+  EdgeInsetsGeometry myPadding()
+  {
+      var screenSize = MediaQuery.of(context).size;
+      print(screenSize.toString());
+      if(screenSize.height < 640)
+        return EdgeInsets.fromLTRB(70.0,0.0,70.0,0.0);
+      else if(screenSize.height < 690)
+        return EdgeInsets.fromLTRB(40.0,0.0,40.0,0.0);
+      else if(screenSize.height < 750)
+        return EdgeInsets.fromLTRB(25.0,0.0,25.0,0.0);
+      else return EdgeInsets.all(16.0);
+  }
+
+
   Widget writeText(String t, int s, Color c) {
     return Column(
       children: <Widget>[
@@ -170,7 +182,7 @@ class _HomePageState extends State<HomePage> {
           style:
               TextStyle(fontSize: 30.0, color: c, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 10.0),
+        const SizedBox(height: 7.0),
         Text(
           '$s',
           style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
@@ -217,6 +229,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  //pulisce la board
   void resetGame() {
     setState(() {
       data.gameBoard = [
@@ -230,6 +243,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  //pulisce la board
   void newGame() {
     resetGame();
     setState(() {
@@ -239,13 +253,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  //cambia difficoltà e pulisce la board
   void incDiff()
   {
+    resetGame();
     setState(() {
       data.difficulty = (data.difficulty + 1) % 4;
     });
   } 
 
+  //assegna i punti
   void markPoints(int mark) {
     switch (mark) {
       case 1:
@@ -271,6 +288,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  //mostra lo snackbar con il vincitore
   void showWinner(int winner) {
     String _text;
 
