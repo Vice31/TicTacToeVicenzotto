@@ -36,13 +36,11 @@ class ai{
           bestScore = tempScore;
           bestCords = botTempCords;
         }
-        if (tempScore < bestScore && player == -1)
-        {
+        if (tempScore < bestScore && player == -1){
           bestScore = tempScore;
           bestCords = botTempCords;
         }
-        if (tempScore > bestScore && player == 1)
-        {
+        if (tempScore > bestScore && player == 1){
           bestScore = tempScore;
           bestCords = botTempCords;
         }
@@ -80,13 +78,11 @@ class ai{
           bestScore = tempScore;
           bestCords = botTempCords;
         }
-        if (tempScore > bestScore && player == -1)
-        {
+        if (tempScore > bestScore && player == -1){
           bestScore = tempScore;
           bestCords = botTempCords;
         }
-        if (tempScore < bestScore && player == 1)
-        {
+        if (tempScore < bestScore && player == 1){
           bestScore = tempScore;
           bestCords = botTempCords;
         }
@@ -123,12 +119,15 @@ class ai{
       return score;
     }
 
-    isMaximizing = !isMaximizing;
-    pValue *= -1;
+    isMaximizing = !isMaximizing; //cambio il massimizzante in minimizzante e viceversa
+    pValue *= -1; //cambio giocatore
 
     for (int i = 0; i < 9; i++) {
       botTempCords = utility.convertToCords(i);
       if (boardCopy[botTempCords[0]][botTempCords[1]] == 0) {
+        //creare copie della board è necessario
+        //se si passa la lista di base come valore di una funzione viene passata per indirizzo
+        //creando una copia identica il problema è risolto
         List<List<int>> botBoard;
         botBoard = [
           [boardCopy[0][0], boardCopy[0][1], boardCopy[0][2], boardCopy[0][3]],
@@ -136,16 +135,9 @@ class ai{
           [boardCopy[2][0], boardCopy[2][1], boardCopy[2][2], boardCopy[2][3]],
           [boardCopy[3][0], boardCopy[3][1], boardCopy[3][2], boardCopy[3][3]]
         ];
+        
         botBoard = utility.insertInBoard(botBoard, botTempCords, pValue);
-
-        List<List<int>> changedBotBoard;
-        changedBotBoard = [
-          [botBoard[0][0], botBoard[0][1], botBoard[0][2], botBoard[0][3]],
-          [botBoard[1][0], botBoard[1][1], botBoard[1][2], botBoard[1][3]],
-          [botBoard[2][0], botBoard[2][1], botBoard[2][2], botBoard[2][3]],
-          [botBoard[3][0], botBoard[3][1], botBoard[3][2], botBoard[3][3]]
-        ];
-        tempScore = minimax(changedBotBoard, isMaximizing, pValue);
+        tempScore = minimax(botBoard, isMaximizing, pValue);
 
         if (score == -100) {
           score = tempScore;
@@ -157,7 +149,6 @@ class ai{
         }
       }
     }
-
     return score;
   }
 
